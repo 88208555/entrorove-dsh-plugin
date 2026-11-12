@@ -1,13 +1,19 @@
 # Entrorove Setup for DeepSeek Harness
 
-This is a guided installer for the official Entrorove SDK, using the same installation model as WorkBuddy. The plugin supplies one setup skill and its references. Task capabilities come from `@entrorove/skill`.
+Connect Entrorove to DeepSeek Harness. The plugin provides the `entrorove-setup` guide to install the official SDK and start using task analysis, planning and delivery review.
 
 ## Install in Harness
 
 In DeepSeek Harness plugin management, install this npm package:
 
 ```text
-@entrorove/dsh-plugin@1.0.0
+@entrorove/dsh-plugin@1.0.1
+```
+
+Or install into the `web` profile with the Harness CLI:
+
+```sh
+dsh plugin --profile web add @entrorove/dsh-plugin
 ```
 
 Enable the bundle and select **Entrorove Setup** (`entrorove-setup`) in a session. Ask it to install Entrorove for DeepSeek Harness. The guide checks the actual command environment and uses `--host deepseek-harness --no-hooks`.

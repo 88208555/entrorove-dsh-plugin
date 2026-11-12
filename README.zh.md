@@ -1,13 +1,19 @@
 # DeepSeek Harness 熵巡安装引导
 
-与 WorkBuddy 采用相同的引导式安装：本插件只提供 `entrorove-setup` 安装说明及参考文档，实际能力由同一个官方 npm 包 `@entrorove/skill` 提供。
+在 DeepSeek Harness 中接入熵巡 Entrorove。本插件提供 `entrorove-setup` 安装引导，帮助安装官方 SDK，并开始使用任务分析、规划与交付核验能力。
 
 ## 安装
 
 在 DeepSeek Harness 的插件管理中安装：
 
 ```text
-@entrorove/dsh-plugin@1.0.0
+@entrorove/dsh-plugin@1.0.1
+```
+
+也可以使用 Harness CLI，安装到 `web` profile：
+
+```sh
+dsh plugin --profile web add @entrorove/dsh-plugin
 ```
 
 启用组合包后，在会话中选择「熵巡安装引导」（`entrorove-setup`），让它为当前 Harness 安装 Entrorove。引导先检查实际命令环境，再使用 `--host deepseek-harness --no-hooks`。
