@@ -1,0 +1,3 @@
+- insert:
+    - id: entrorove-setup
+      name: '@entrorove/dsh-plugin'

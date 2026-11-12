@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Entrorove Setup",
+    "description": "Guided installation of the official Entrorove npm SDK. Reuses existing credentials and the same managed runtime."
+  }
+}

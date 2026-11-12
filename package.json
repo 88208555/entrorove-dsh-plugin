@@ -1,0 +1,29 @@
+{
+  "name": "@entrorove/dsh-plugin",
+  "version": "1.0.0",
+  "description": "Guided Entrorove SDK installation for DeepSeek Harness",
+  "type": "module",
+  "main": "host.mjs",
+  "icon": "./icon.svg",
+  "exports": {
+    ".": "./host.mjs",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./package.json": "./package.json"
+  },
+  "files": ["host.mjs", "guide.json", "cordis.patch.yml", "icon.svg", "locale", "skills", "README.zh.md"],
+  "scripts": {
+    "prepack": "node --check host.mjs"
+  },
+  "engines": { "node": ">=24.9.0", "dsh": ">=0.2.2-rc.1 <0.3.0" },
+  "dsh": { "bundle": { "patch": "./cordis.patch.yml" } },
+  "keywords": ["dsh-plugin", "deepseek-harness", "entrorove", "agent-skills", "installation-guide"],
+  "homepage": "https://entrorove.com",
+  "author": "Entrorove",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/88208555/entrorove-dsh-plugin.git"
+  },
+  "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org" }
+}

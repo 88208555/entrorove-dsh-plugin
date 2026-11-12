@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "熵巡安装引导",
+    "description": "在 DeepSeek Harness 中引导安装官方 Entrorove npm SDK，复用已有凭证和同一份受管运行时。"
+  }
+}
