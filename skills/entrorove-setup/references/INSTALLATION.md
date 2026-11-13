@@ -20,14 +20,14 @@ Node.js 应为 20 或更高版本。工具已经提供其他 Node 路径时先�
 macOS / Linux：
 
 ```sh
-npm_config_cache="$(mktemp -d "${TMPDIR:-/tmp}/entrorove-npm.XXXXXXXX")" npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.66 install --host deepseek-harness --no-hooks
+npm_config_cache="$(mktemp -d "${TMPDIR:-/tmp}/entrorove-npm.XXXXXXXX")" npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.68 install --host deepseek-harness --no-hooks
 ```
 
 Windows PowerShell：
 
 ```powershell
 $entroroveCache = Join-Path ([IO.Path]::GetTempPath()) ("entrorove-npm-" + [guid]::NewGuid())
-npx --cache "$entroroveCache" --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.66 install --host deepseek-harness --no-hooks
+npx --cache "$entroroveCache" --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.68 install --host deepseek-harness --no-hooks
 ```
 
 固定版本来自本版发布件，不用国内镜像的 `latest` 推断官方版本。核对后续官方发布可运行 `npm view @entrorove/skill@latest version --prefer-online --registry=https://registry.npmjs.org`。需要手动升级时，用核对到的完整版本号执行上面的独立缓存命令；原凭证与任务状态复用。
