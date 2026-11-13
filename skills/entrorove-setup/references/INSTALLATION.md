@@ -15,26 +15,139 @@ Node.js 应为 20 或更高版本。工具已经提供其他 Node 路径时先�
 
 已有受管安装时，直接使用上次 `discovery.skillPath` 中的启动器处理任务，让后台更新机制检查新版；不要每个任务重复运行 npx 安装命令。
 
-首次安装使用本版引导对应的固定 SDK 版本和一次性的独立 npm 缓存，避开全局 `_npx` 历史残留；不改变全局 npm 配置。下面的示例用于 DeepSeek Harness。
+首次安装使用本版引导对应的固定 SDK 版本和一次性的独立 npm 缓存，避开全局 `_npx` 历史残留；不改变全局 npm 配置。下面的示例用于 DeepSeek Harness，宿主参数为 `--host deepseek-harness --no-hooks`。
 
 macOS / Linux：
 
 ```sh
-npm_config_cache="$(mktemp -d "${TMPDIR:-/tmp}/entrorove-npm.XXXXXXXX")" npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.68 install --host deepseek-harness --no-hooks
+node -e 'const fs=require('\''node:fs'\''),os=require('\''node:os'\''),path=require('\''node:path'\''),cp=require('\''node:child_process'\'');
+const version='\''0.2.69'\'',args=['\''--ignore-scripts'\'','\''--yes'\'','\''--prefer-online'\'','\''--registry=https://registry.npmjs.org'\'','\''@entrorove/skill@0.2.69'\'','\''install'\'','\''--host'\'','\''deepseek-harness'\'','\''--no-hooks'\''];
+const root=fs.mkdtempSync(path.join(os.tmpdir(),'\''entrorove-install-'\'')),cache=path.join(root,'\''cache'\'');
+fs.chmodSync(root,0o700);fs.mkdirSync(cache,{mode:0o700});
+const original=fs.lstatSync(cache),owner=fs.lstatSync(root),receipt=path.join(root,'\''result.json'\'');
+const canonicalCache=fs.realpathSync(cache);
+const same=(a,b)=>a.dev===b.dev&&a.ino===b.ino&&a.uid===b.uid&&a.isDirectory()&&!a.isSymbolicLink()
+ &&(process.platform==='\''win32'\''||!(a.mode&0o022));
+const inside=(parent,file)=>{const rel=path.relative(parent,file);return rel==='\'''\''||!rel.startsWith('\''..'\''+path.sep)&&rel!=='\''..'\''&&!path.isAbsolute(rel)};
+const inCache=file=>inside(cache,file)||inside(canonicalCache,file);
+let code=1,reason='\''installation-not-started'\'',cleaned=false,persistent=false,installationOutcome='\''not-started'\'';
+function persistentRuntime(){
+ const marker=path.join(os.homedir(),'\''.codex'\'','\''skills'\'','\''entrorove'\'','\''.entrorove-managed.json'\'');
+ try{
+  const stat=fs.lstatSync(marker);if(!stat.isFile()||stat.isSymbolicLink())return false;
+  const value=JSON.parse(fs.readFileSync(marker,'\''utf8'\'')),cli=value.sdkRuntime?.cli;
+  if(typeof cli!=='\''string'\''||!path.isAbsolute(cli)||inCache(cli))return false;
+  const actual=fs.realpathSync(cli),meta=JSON.parse(fs.readFileSync(path.join(path.dirname(actual),'\''package.json'\''),'\''utf8'\''));
+  return value.schemaVersion==='\''entrorove.managed-install/1.0'\''&&value.name==='\''entrorove'\''&&value.version===version
+   &&meta.name==='\''@entrorove/skill'\''&&meta.version===version&&!inCache(actual)&&fs.lstatSync(actual).isFile();
+ }catch{return false}
+}
+function cacheReferenced(){
+ const marker=path.join(os.homedir(),'\''.codex'\'','\''skills'\'','\''entrorove'\'','\''.entrorove-managed.json'\'');
+ try{
+  const stat=fs.lstatSync(marker);if(!stat.isFile()||stat.isSymbolicLink())return true;
+  const value=JSON.parse(fs.readFileSync(marker,'\''utf8'\'')),cli=value.sdkRuntime?.cli;
+  if(typeof cli!=='\''string'\''||!path.isAbsolute(cli))return true;
+  return inCache(cli)||inCache(fs.realpathSync(cli));
+ }catch(error){return error.code!=='\''ENOENT'\''}
+}
+try{
+ const env={...process.env,npm_config_cache:cache,ENTROROVE_AUTO_UPDATE:'\''0'\''};
+ const windows=process.platform==='\''win32'\'',command=windows?(process.env.ComSpec||'\''cmd.exe'\''):'\''npx'\'';
+ const argv=windows?['\''/d'\'','\''/s'\'','\''/c'\'','\''npx.cmd '\''+args.join('\'' '\'')]:args;
+ const result=cp.spawnSync(command,argv,{stdio:'\''inherit'\'',env,windowsHide:true});
+ code=Number.isInteger(result.status)?result.status:1;
+ reason=result.error?'\''installation-launch-failed'\'':result.signal?'\''installation-interrupted'\'':'\''installation-exited'\'';
+ installationOutcome=reason;
+}finally{
+ try{
+  persistent=persistentRuntime();
+  if(!same(fs.lstatSync(root),owner)||!same(fs.lstatSync(cache),original))reason='\''cache-identity-changed'\'';
+  else if(installationOutcome==='\''installation-interrupted'\'')reason='\''process-completion-unverified'\'';
+  else if(cacheReferenced())reason='\''cache-reference-unverified'\'';
+  else if(code===0&&!persistent)reason='\''persistent-sdk-unverified'\'';
+  else{fs.rmSync(cache,{recursive:true});cleaned=true;reason='\''owned-cache-released'\''}
+ }catch{reason='\''cache-cleanup-incomplete'\''}
+ try{
+  if(same(fs.lstatSync(root),owner)){
+   fs.writeFileSync(receipt,JSON.stringify({schemaVersion:'\''entrorove.install-recovery-result/1.0'\'',version,
+    exitCode:code,installationOutcome,sdkRuntimePersistent:persistent,cache,cleaned,reason,
+    observedAt:new Date().toISOString(),rawLogsRetained:cleaned?false:'\''unverified'\''})+'\''\n'\'',{flag:'\''wx'\'',mode:0o600});
+   process.stderr.write('\''Entrorove installation result: '\''+receipt+'\''\n'\'');
+  }else process.stderr.write('\''ENTROROVE_INSTALL_CACHE_IDENTITY_CHANGED\n'\'');
+ }catch{process.stderr.write('\''ENTROROVE_INSTALL_RESULT_NOT_RECORDED\n'\'')}
+ process.exitCode=code;
+}'
 ```
 
 Windows PowerShell：
 
 ```powershell
-$entroroveCache = Join-Path ([IO.Path]::GetTempPath()) ("entrorove-npm-" + [guid]::NewGuid())
-npx --cache "$entroroveCache" --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.68 install --host deepseek-harness --no-hooks
+node -e 'const fs=require(''node:fs''),os=require(''node:os''),path=require(''node:path''),cp=require(''node:child_process'');
+const version=''0.2.69'',args=[''--ignore-scripts'',''--yes'',''--prefer-online'',''--registry=https://registry.npmjs.org'',''@entrorove/skill@0.2.69'',''install'',''--host'',''deepseek-harness'',''--no-hooks''];
+const root=fs.mkdtempSync(path.join(os.tmpdir(),''entrorove-install-'')),cache=path.join(root,''cache'');
+fs.chmodSync(root,0o700);fs.mkdirSync(cache,{mode:0o700});
+const original=fs.lstatSync(cache),owner=fs.lstatSync(root),receipt=path.join(root,''result.json'');
+const canonicalCache=fs.realpathSync(cache);
+const same=(a,b)=>a.dev===b.dev&&a.ino===b.ino&&a.uid===b.uid&&a.isDirectory()&&!a.isSymbolicLink()
+ &&(process.platform===''win32''||!(a.mode&0o022));
+const inside=(parent,file)=>{const rel=path.relative(parent,file);return rel===''''||!rel.startsWith(''..''+path.sep)&&rel!==''..''&&!path.isAbsolute(rel)};
+const inCache=file=>inside(cache,file)||inside(canonicalCache,file);
+let code=1,reason=''installation-not-started'',cleaned=false,persistent=false,installationOutcome=''not-started'';
+function persistentRuntime(){
+ const marker=path.join(os.homedir(),''.codex'',''skills'',''entrorove'',''.entrorove-managed.json'');
+ try{
+  const stat=fs.lstatSync(marker);if(!stat.isFile()||stat.isSymbolicLink())return false;
+  const value=JSON.parse(fs.readFileSync(marker,''utf8'')),cli=value.sdkRuntime?.cli;
+  if(typeof cli!==''string''||!path.isAbsolute(cli)||inCache(cli))return false;
+  const actual=fs.realpathSync(cli),meta=JSON.parse(fs.readFileSync(path.join(path.dirname(actual),''package.json''),''utf8''));
+  return value.schemaVersion===''entrorove.managed-install/1.0''&&value.name===''entrorove''&&value.version===version
+   &&meta.name===''@entrorove/skill''&&meta.version===version&&!inCache(actual)&&fs.lstatSync(actual).isFile();
+ }catch{return false}
+}
+function cacheReferenced(){
+ const marker=path.join(os.homedir(),''.codex'',''skills'',''entrorove'',''.entrorove-managed.json'');
+ try{
+  const stat=fs.lstatSync(marker);if(!stat.isFile()||stat.isSymbolicLink())return true;
+  const value=JSON.parse(fs.readFileSync(marker,''utf8'')),cli=value.sdkRuntime?.cli;
+  if(typeof cli!==''string''||!path.isAbsolute(cli))return true;
+  return inCache(cli)||inCache(fs.realpathSync(cli));
+ }catch(error){return error.code!==''ENOENT''}
+}
+try{
+ const env={...process.env,npm_config_cache:cache,ENTROROVE_AUTO_UPDATE:''0''};
+ const windows=process.platform===''win32'',command=windows?(process.env.ComSpec||''cmd.exe''):''npx'';
+ const argv=windows?[''/d'',''/s'',''/c'',''npx.cmd ''+args.join('' '')]:args;
+ const result=cp.spawnSync(command,argv,{stdio:''inherit'',env,windowsHide:true});
+ code=Number.isInteger(result.status)?result.status:1;
+ reason=result.error?''installation-launch-failed'':result.signal?''installation-interrupted'':''installation-exited'';
+ installationOutcome=reason;
+}finally{
+ try{
+  persistent=persistentRuntime();
+  if(!same(fs.lstatSync(root),owner)||!same(fs.lstatSync(cache),original))reason=''cache-identity-changed'';
+  else if(installationOutcome===''installation-interrupted'')reason=''process-completion-unverified'';
+  else if(cacheReferenced())reason=''cache-reference-unverified'';
+  else if(code===0&&!persistent)reason=''persistent-sdk-unverified'';
+  else{fs.rmSync(cache,{recursive:true});cleaned=true;reason=''owned-cache-released''}
+ }catch{reason=''cache-cleanup-incomplete''}
+ try{
+  if(same(fs.lstatSync(root),owner)){
+   fs.writeFileSync(receipt,JSON.stringify({schemaVersion:''entrorove.install-recovery-result/1.0'',version,
+    exitCode:code,installationOutcome,sdkRuntimePersistent:persistent,cache,cleaned,reason,
+    observedAt:new Date().toISOString(),rawLogsRetained:cleaned?false:''unverified''})+''\n'',{flag:''wx'',mode:0o600});
+   process.stderr.write(''Entrorove installation result: ''+receipt+''\n'');
+  }else process.stderr.write(''ENTROROVE_INSTALL_CACHE_IDENTITY_CHANGED\n'');
+ }catch{process.stderr.write(''ENTROROVE_INSTALL_RESULT_NOT_RECORDED\n'')}
+ process.exitCode=code;
+}'
 ```
 
 固定版本来自本版发布件，不用国内镜像的 `latest` 推断官方版本。核对后续官方发布可运行 `npm view @entrorove/skill@latest version --prefer-online --registry=https://registry.npmjs.org`。需要手动升级时，用核对到的完整版本号执行上面的独立缓存命令；原凭证与任务状态复用。
 
 ## npm ENOTEMPTY 自助恢复
 
-出现 `ENOTEMPTY`、`syscall rename` 或非空 `.skill-*` 临时目录冲突，说明 npm 尚未成功启动 SDK。不要反复重跑原命令，也不要清空 `~/.npm`、技能目录或凭证。直接运行上面的独立缓存命令，每次分配新缓存，不删除或修理旧文件。若仍失败，保留这次真实 npm 错误；不要将它报告为 SDK 执行结果。
+出现 `ENOTEMPTY`、`syscall rename` 或非空 `.skill-*` 临时目录冲突，说明 npm 尚未成功启动 SDK。不要反复重跑原命令，也不要清空 `~/.npm`、技能目录或凭证。直接运行上面的独立缓存命令，每次分配私有新缓存，只在确认本次目录身份且持久 SDK 不依赖该缓存后回收；中断或引用不明时保留，并输出本次结果文件路径。不清理旧缓存或其他项目。若仍失败，保留这次真实 npm 错误；不要将它报告为 SDK 执行结果。
 
 `--no-hooks` 让这条引导安装命令不启用聊天监听或工具守卫。重复安装会更新未修改的受管内容；发现手工修改、同版本内容冲突或其他文件占用时明确报错或保留现有文件，不覆盖用户内容。不要自行清空目录再重装。
 

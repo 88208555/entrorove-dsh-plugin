@@ -7,7 +7,7 @@ Connect Entrorove to DeepSeek Harness. The plugin provides the `entrorove-setup`
 In DeepSeek Harness plugin management, install this npm package:
 
 ```text
-@entrorove/dsh-plugin@1.0.4
+@entrorove/dsh-plugin@1.0.5
 ```
 
 Or install into the `web` profile with the Harness CLI:
@@ -19,6 +19,8 @@ dsh plugin --profile web add @entrorove/dsh-plugin
 Enable the bundle and select **Entrorove Setup** (`entrorove-setup`) in a session. Ask it to install Entrorove for DeepSeek Harness. The guide checks the actual command environment and uses `--host deepseek-harness --no-hooks`.
 
 The SDK installer returns the managed `discovery.skillPath`. Read its `SKILL.md` and use the launcher there. The setup plugin does not contain a launcher. An existing Entrorove installation and personal credential are reused. On the first actual task, the SDK can provision a private 24-hour installation credential; after expiry it directs the user to the website for a personal key.
+
+This version's first-install guide targets SDK 0.2.69 and reuses the existing installation, credential and host configuration.
 
 Harness 0.2.2-rc.1 or newer within 0.2.x is supported. Its skills service and an authorized command environment are required. Plugin installation, enabled state, skill discovery and a successful SDK call are separate observations.
 

@@ -1,6 +1,6 @@
 {
   "name": "@entrorove/dsh-plugin",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Guided Entrorove SDK installation for DeepSeek Harness",
   "type": "module",
   "main": "host.mjs",
