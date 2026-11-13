@@ -7,7 +7,7 @@
 在 DeepSeek Harness 的插件管理中安装：
 
 ```text
-@entrorove/dsh-plugin@1.0.1
+@entrorove/dsh-plugin@1.0.2
 ```
 
 也可以使用 Harness CLI，安装到 `web` profile：
