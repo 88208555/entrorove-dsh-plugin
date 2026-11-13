@@ -7,7 +7,7 @@ Connect Entrorove to DeepSeek Harness. The plugin provides the `entrorove-setup`
 In DeepSeek Harness plugin management, install this npm package:
 
 ```text
-@entrorove/dsh-plugin@1.0.2
+@entrorove/dsh-plugin@1.0.3
 ```
 
 Or install into the `web` profile with the Harness CLI:
