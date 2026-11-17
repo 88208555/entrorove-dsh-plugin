@@ -1,6 +1,6 @@
 ---
 name: entrorove-setup
-version: 1.0.1
+version: 1.0.2
 description: 引导在当前编程或办公代理中安装、配置或更新熵巡 Entrorove。用户需要接入 Entrorove、排查技能安装、配置个人密钥或升级官方 SDK 时使用。实际任务能力由官方 npm 包提供。
 ---
 
@@ -9,7 +9,7 @@ description: 引导在当前编程或办公代理中安装、配置或更新熵�
 这是一份通用安装引导。实际能力、受管技能内容和更新由官方 npm 包 `@entrorove/skill` 提供。安装引导使用 `entrorove-setup` 标识，运行技能使用 `entrorove`，避免市场引导文件占用受管技能的目录。
 
 1. 确认当前真实软件和执行环境。按[宿主选择](references/HOSTS.md)选择对应入口。只检查当前环境已有的命令工具、Node.js 20+ 和 npm；不要把能聊天视为能执行命令，也不要把桌面运行时视为云端沙箱运行时。
-2. 按[安装与配置](references/INSTALLATION.md)从官方 npm 安装或更新。保留安装输出中的 `discovery.skillPath` 和 `discovery.invokeEnvironment`，读取那个受管目录中的 `SKILL.md`，再按实际任务调用需要的能力。引导目录不包含 SDK 启动器。
+2. 按[安装与配置](references/INSTALLATION.md)从官方 npm 的固定版本短命令安装或更新；安装锁故障使用该文档中的 `unlock --install` 恢复，缓存脚本只作 npm 启动失败的备用入口，不绕过宿主删除策略。保留安装输出中的 `discovery.skillPath` 和 `discovery.invokeEnvironment`，读取那个受管目录中的 `SKILL.md`，再按实际任务调用需要的能力。引导目录不包含 SDK 启动器。
 3. 首次实际任务运行受管启动器的 `connect`，已有个人凭证直接复用；没有凭证时自动创建安装级体验账号并私密保存凭证，不打开网站，不索要用户密钥。体验身份不代表宿主真实账号，权限和额度以服务端返回为准。正式账号绑定仍可按[安装与配置](references/INSTALLATION.md)通过私有输入处理；不要让用户在对话中发送密钥。
 4. 在目标宿主实际观察安装、加载和 SDK 调用的结果。安装成功、配置文件存在或演示可访问，均不能证明某个业务任务已经执行。按[边界与故障处理](references/BOUNDARIES.md)记录实际结果。
 
