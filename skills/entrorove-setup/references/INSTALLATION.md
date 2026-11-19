@@ -47,7 +47,7 @@ macOS / Linux：
 
 ```sh
 node -e 'const fs=require('\''node:fs'\''),os=require('\''node:os'\''),path=require('\''node:path'\''),cp=require('\''node:child_process'\'');
-const version='\''0.2.75'\'',args=['\''--ignore-scripts'\'','\''--yes'\'','\''--prefer-online'\'','\''--registry=https://registry.npmjs.org'\'','\''@entrorove/skill@0.2.75'\'','\''install'\'','\''--host'\'','\''deepseek-harness'\'','\''--no-hooks'\''];
+const version='\''0.2.76'\'',args=['\''--ignore-scripts'\'','\''--yes'\'','\''--prefer-online'\'','\''--registry=https://registry.npmjs.org'\'','\''@entrorove/skill@0.2.76'\'','\''install'\'','\''--host'\'','\''deepseek-harness'\'','\''--no-hooks'\''];
 const root=fs.mkdtempSync(path.join(os.tmpdir(),'\''entrorove-install-'\'')),cache=path.join(root,'\''cache'\'');
 fs.chmodSync(root,0o700);fs.mkdirSync(cache,{mode:0o700});
 const original=fs.lstatSync(cache),owner=fs.lstatSync(root),receipt=path.join(root,'\''result.json'\'');
@@ -110,7 +110,7 @@ Windows PowerShell：
 
 ```powershell
 node -e 'const fs=require(''node:fs''),os=require(''node:os''),path=require(''node:path''),cp=require(''node:child_process'');
-const version=''0.2.75'',args=[''--ignore-scripts'',''--yes'',''--prefer-online'',''--registry=https://registry.npmjs.org'',''@entrorove/skill@0.2.75'',''install'',''--host'',''deepseek-harness'',''--no-hooks''];
+const version=''0.2.76'',args=[''--ignore-scripts'',''--yes'',''--prefer-online'',''--registry=https://registry.npmjs.org'',''@entrorove/skill@0.2.76'',''install'',''--host'',''deepseek-harness'',''--no-hooks''];
 const root=fs.mkdtempSync(path.join(os.tmpdir(),''entrorove-install-'')),cache=path.join(root,''cache'');
 fs.chmodSync(root,0o700);fs.mkdirSync(cache,{mode:0o700});
 const original=fs.lstatSync(cache),owner=fs.lstatSync(root),receipt=path.join(root,''result.json'');
