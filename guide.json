@@ -2,6 +2,6 @@
   "name": "entrorove-setup",
   "description": "引导在当前编程或办公代理中安装、配置或更新熵巡 Entrorove。用户需要接入 Entrorove、排查技能安装、配置个人密钥或升级官方 SDK 时使用。实际任务能力由官方 npm 包提供。",
   "guideVersion": "1.0.2",
-  "sdkVersion": "0.2.76",
+  "sdkVersion": "0.2.79",
   "sourceSha256": "51fa25ec23175cfdcb06e84e7cb9aa22e1b7b34ffeb59ad1c11f711bf91514fb"
 }
