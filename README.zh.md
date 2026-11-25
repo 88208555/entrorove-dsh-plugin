@@ -7,7 +7,7 @@
 在 DeepSeek Harness 的插件管理中安装：
 
 ```text
-@entrorove/dsh-plugin@1.0.8
+@entrorove/dsh-plugin@1.0.10
 ```
 
 也可以使用 Harness CLI，安装到 `web` profile：
@@ -20,7 +20,7 @@ dsh plugin --profile web add @entrorove/dsh-plugin
 
 保留 SDK 安装输出中的 `discovery.skillPath`，读取那个目录中的 `SKILL.md` 并使用其启动器。引导插件本身没有启动器。已有受管安装与个人密钥原样复用；无凭证时首次实际任务可自动领取 24 小时临时密钥，到期后提示进入官网登录获取个人密钥。
 
-本版的首次安装、安装锁解锁和缓存恢复统一使用 SDK 0.2.79，继续复用已有安装、凭证与宿主配置。
+本版的首次安装、安装锁解锁和缓存恢复统一使用 SDK 0.2.87，继续复用已有安装、凭证与宿主配置。
 
 兼容 Harness 0.2.2-rc.1 及其后的 0.2.x 版本。宿主需要技能服务与实际可用、获准的命令环境。插件已安装、已启用、技能可发现和 SDK 调用成功分别验证。
 
