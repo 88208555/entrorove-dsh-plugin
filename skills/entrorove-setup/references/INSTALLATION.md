@@ -22,7 +22,7 @@ macOS / Linux 与 Windows PowerShell：
 <!-- Entrorove release: install -->
 
 ```sh
-npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.87 install --host deepseek-harness --no-hooks
+npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.89 install --host deepseek-harness --no-hooks
 ```
 
 固定版本来自本版发布件，不用国内镜像的 `latest` 推断官方版本。核对后续官方发布可运行 `npm view @entrorove/skill@latest version --prefer-online --registry=https://registry.npmjs.org`。需要手动升级时，用核对到的完整版本号执行上面的短命令；原凭证与任务状态复用。
@@ -34,7 +34,7 @@ npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill
 <!-- Entrorove release: unlock -->
 
 ```sh
-npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.87 unlock --install --dry-run
+npx --yes --prefer-online --registry=https://registry.npmjs.org @entrorove/skill@0.2.89 unlock --install --dry-run
 ```
 
 需要恢复时去掉 `--dry-run`。它只处理安装锁，不改变账号、任务、协议、业务权限或宿主删除策略。活跃进程、刚创建且没有归属记录的锁、非法内容和链接会保留；过时的空锁只移动保留，不冒充已验证归属后删除。返回 `unlocked`、`canonical`、`retired` 和 `nextStep`，区分已释放锁名与尚未清完的临时目录。成功安装之后的锁删除失败会单独返回 `installationLock.warning`，不会推翻已经完成的安装；原始安装失败仍保留原错误。
@@ -53,7 +53,7 @@ macOS / Linux：
 
 ```sh
 node -e 'const fs=require('\''node:fs'\''),os=require('\''node:os'\''),path=require('\''node:path'\''),cp=require('\''node:child_process'\'');
-const version='\''0.2.87'\'',args=['\''--ignore-scripts'\'','\''--yes'\'','\''--prefer-online'\'','\''--registry=https://registry.npmjs.org'\'','\''@entrorove/skill@0.2.87'\'','\''install'\'','\''--host'\'','\''deepseek-harness'\'','\''--no-hooks'\''];
+const version='\''0.2.89'\'',args=['\''--ignore-scripts'\'','\''--yes'\'','\''--prefer-online'\'','\''--registry=https://registry.npmjs.org'\'','\''@entrorove/skill@0.2.89'\'','\''install'\'','\''--host'\'','\''deepseek-harness'\'','\''--no-hooks'\''];
 const root=fs.mkdtempSync(path.join(os.tmpdir(),'\''entrorove-install-'\'')),cache=path.join(root,'\''cache'\'');
 fs.chmodSync(root,0o700);fs.mkdirSync(cache,{mode:0o700});
 const original=fs.lstatSync(cache),owner=fs.lstatSync(root),receipt=path.join(root,'\''result.json'\'');
@@ -118,7 +118,7 @@ Windows PowerShell：
 
 ```powershell
 node -e 'const fs=require(''node:fs''),os=require(''node:os''),path=require(''node:path''),cp=require(''node:child_process'');
-const version=''0.2.87'',args=[''--ignore-scripts'',''--yes'',''--prefer-online'',''--registry=https://registry.npmjs.org'',''@entrorove/skill@0.2.87'',''install'',''--host'',''deepseek-harness'',''--no-hooks''];
+const version=''0.2.89'',args=[''--ignore-scripts'',''--yes'',''--prefer-online'',''--registry=https://registry.npmjs.org'',''@entrorove/skill@0.2.89'',''install'',''--host'',''deepseek-harness'',''--no-hooks''];
 const root=fs.mkdtempSync(path.join(os.tmpdir(),''entrorove-install-'')),cache=path.join(root,''cache'');
 fs.chmodSync(root,0o700);fs.mkdirSync(cache,{mode:0o700});
 const original=fs.lstatSync(cache),owner=fs.lstatSync(root),receipt=path.join(root,''result.json'');

@@ -1,10 +1,15 @@
 ---
 name: entrorove-setup
 version: 1.0.2
-description: 引导在当前编程或办公代理中安装、配置或更新熵巡 Entrorove。用户需要接入 Entrorove、排查技能安装、配置个人密钥或升级官方 SDK 时使用。实际任务能力由官方 npm 包提供。
+title: "需求到验收的证据化开发框架"
+description: "输入任务目标，云端自动规划拆解、协同执行，以运行结果与签名证据支撑交付验收。开发工具类技能：当用户提到熵巡、entrorove、代码评审、修 bug 回归证据、交付验收、外包验收、合规留证、云端规划、任务验收、证据平台，或需要安装、更新、首次接入 Entorove SDK 时使用本技能。"
 ---
 
-# 熵巡 Entrorove 安装引导
+# 需求到验收的证据化开发框架
+
+输入任务目标，云端自动规划拆解、协同执行，以运行结果与签名证据支撑交付验收。开发工具类技能：当用户提到熵巡、entrorove、代码评审、修 bug 回归证据、交付验收、外包验收、合规留证、云端规划、任务验收、证据平台，或需要安装、更新、首次接入 Entorove SDK 时使用本技能。
+
+在 DeepSeek Harness 的插件管理中安装并启用本插件，再在会话中选择 `entrorove-setup`。也可以运行 `dsh plugin --profile web add @entrorove/dsh-plugin` 安装到 web profile。引导通过 `--host deepseek-harness --no-hooks` 接入官方 SDK，运行能力由 SDK 提供。
 
 这是一份通用安装引导。实际能力、受管技能内容和更新由官方 npm 包 `@entrorove/skill` 提供。安装引导使用 `entrorove-setup` 标识，运行技能使用 `entrorove`，避免市场引导文件占用受管技能的目录。
 

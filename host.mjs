@@ -21,7 +21,8 @@ function checkAbort(options, control) {
 async function descriptor(options, control) {
   checkAbort(options, control);
   const value = JSON.parse(await readFile(descriptorFile, { encoding: 'utf8', signal: options?.signal ?? control.signal }));
-  if (value.name !== name || typeof value.description !== 'string' || !value.description.trim()) {
+  if (value.name !== name || typeof value.title !== 'string' || !value.title.trim() ||
+      typeof value.description !== 'string' || !value.description.trim()) {
     throw new Error('Entrorove plugin guide metadata is invalid; reinstall the same official plugin release.');
   }
   checkAbort(options, control);
@@ -49,7 +50,7 @@ export function apply(ctx) {
       const header = /^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/u.exec(raw);
       if (!header || raw.length > 65536) throw new Error('Entrorove installation guide is missing or invalid.');
       checkAbort(options, control);
-      return { ...summary(value), content: raw.slice(header[0].length).trim() + hostContext };
+      return { ...summary(value), metadata: { title: value.title }, content: raw.slice(header[0].length).trim() + hostContext };
     },
   }));
 }

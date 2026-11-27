@@ -1,7 +1,8 @@
 {
   "name": "entrorove-setup",
-  "description": "引导在当前编程或办公代理中安装、配置或更新熵巡 Entrorove。用户需要接入 Entrorove、排查技能安装、配置个人密钥或升级官方 SDK 时使用。实际任务能力由官方 npm 包提供。",
+  "title": "需求到验收的证据化开发框架",
+  "description": "输入任务目标，云端自动规划拆解、协同执行，以运行结果与签名证据支撑交付验收。开发工具类技能：当用户提到熵巡、entrorove、代码评审、修 bug 回归证据、交付验收、外包验收、合规留证、云端规划、任务验收、证据平台，或需要安装、更新、首次接入 Entorove SDK 时使用本技能。",
   "guideVersion": "1.0.2",
-  "sdkVersion": "0.2.87",
-  "sourceSha256": "51fa25ec23175cfdcb06e84e7cb9aa22e1b7b34ffeb59ad1c11f711bf91514fb"
+  "sdkVersion": "0.2.89",
+  "sourceSha256": "ea68acda4b52fe06cdabbcbfddda48d7feed336529321608de0251832518e19c"
 }
